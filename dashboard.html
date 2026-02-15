@@ -7,22 +7,45 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, sans-serif; }
         body { background-color: #02040a; color: white; display: flex; height: 100vh; overflow: hidden; }
+        
+        /* Sidebar */
         .sidebar { width: 260px; background: #0f172a; border-right: 1px solid #1e293b; display: flex; flex-direction: column; padding: 20px; flex-shrink: 0; }
         .brand { font-size: 1.4rem; font-weight: bold; margin-bottom: 40px; }
         .brand span { color: #06b6d4; }
         .menu-item { padding: 12px 15px; margin-bottom: 5px; color: #94a3b8; cursor: pointer; border-radius: 8px; transition: 0.3s; display: flex; align-items: center; gap: 12px; }
         .menu-item:hover, .menu-item.active { background: #1e293b; color: #fff; }
         .menu-item.active { border-left: 3px solid #06b6d4; }
+        
+        /* Main Content */
         .main-content { flex-grow: 1; padding: 30px; overflow-y: auto; height: 100vh; }
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
         .user-profile { display: flex; align-items: center; gap: 12px; background: #1e293b; padding: 8px 15px; border-radius: 50px; }
         .avatar { width: 35px; height: 35px; background: #06b6d4; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-        .goal-section { background: linear-gradient(135deg, #0f172a, #1e293b); padding: 25px; border-radius: 16px; border: 1px solid #06b6d4; margin-bottom: 30px; }
-        .progress-container { background: #02040a; height: 12px; border-radius: 10px; width: 100%; overflow: hidden; margin-top: 10px; }
-        .progress-bar { background: #06b6d4; height: 100%; width: 2%; box-shadow: 0 0 10px #06b6d4; }
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
-        .card { background: #0f172a; padding: 25px; border-radius: 16px; border: 1px solid #1e293b; }
+
+        /* Stats & Resume Layout */
+        .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+        .card { background: #0f172a; padding: 25px; border-radius: 16px; border: 1px solid #1e293b; margin-bottom: 20px; }
+        
+        /* --- SKILLS BARS --- */
+        .skill-box { margin-bottom: 15px; }
+        .skill-info { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 5px; color: #94a3b8; }
+        .skill-bar { height: 8px; background: #02040a; border-radius: 10px; overflow: hidden; }
+        .skill-fill { height: 100%; background: #06b6d4; box-shadow: 0 0 10px #06b6d4; border-radius: 10px; }
+
+        /* --- RESUME SECTION --- */
+        .resume-item { border-left: 2px solid #1e293b; padding-left: 15px; margin-bottom: 20px; position: relative; }
+        .resume-item::after { content: ''; position: absolute; left: -6px; top: 0; width: 10px; height: 10px; background: #06b6d4; border-radius: 50%; }
+        .resume-item h4 { font-size: 1rem; color: #fff; }
+        .resume-item p { font-size: 0.85rem; color: #94a3b8; margin-top: 4px; }
+
         .logout-btn { margin-top: auto; padding: 12px 15px; color: #f87171; cursor: pointer; display: flex; align-items: center; gap: 12px; }
+
+        @media (max-width: 1024px) { .dashboard-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; flex-direction: row; overflow-x: auto; padding: 10px; }
+            .main-content { height: calc(100vh - 70px); }
+        }
     </style>
 </head>
 <body>
@@ -35,38 +58,109 @@
         <div class="menu-item" onclick="window.location.href='settings.html'">⚙️ Settings</div>
         <div class="logout-btn" id="logoutBtn">🚪 Log Out</div>
     </div>
+
     <div class="main-content">
         <div class="header">
-            <h1>Dashboard</h1>
-            <div class="user-profile"><div class="avatar" id="userAvatar">U</div><span id="userEmail">Loading...</span></div>
+            <div class="welcome-text">
+                <h1 id="welcomeTitle">Dashboard</h1>
+                <p style="color: #94a3b8;">Welcome back, Developer.</p>
+            </div>
+            <div class="user-profile">
+                <div class="avatar" id="userAvatar">U</div>
+                <span id="userEmail">Loading...</span>
+            </div>
         </div>
-        <div class="goal-section">
-            <h3>Financial Goal: $500,000</h3>
-            <div class="progress-container"><div class="progress-bar"></div></div>
-            <p style="margin-top:10px; color:#f59e0b;">Strategy: Trend Pullback Strategy</p>
-        </div>
-        <div class="stats-grid">
-            <div class="card"><h3>Active Projects</h3><div id="projCount" style="font-size:2rem; font-weight:bold;">0</div></div>
-            <div class="card"><h3>Revenue</h3><div style="font-size:2rem; font-weight:bold;">$4,200</div></div>
+
+        <div class="dashboard-grid">
+            <div>
+                <div class="card" style="border-top: 3px solid #06b6d4;">
+                    <h3>Project Database Overview</h3>
+                    <div style="display: flex; gap: 40px; margin-top: 20px;">
+                        <div><p style="color: #94a3b8; font-size: 0.8rem;">Active</p><div style="font-size: 2rem; font-weight: bold;" id="projCount">0</div></div>
+                        <div><p style="color: #94a3b8; font-size: 0.8rem;">Revenue</p><div style="font-size: 2rem; font-weight: bold;">₦500k</div></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Recent Career Milestones</h3>
+                    <div class="resume-item">
+                        <h4>Platform Launch</h4>
+                        <p>Successfully deployed "Josh Intake" Command Center on GitHub Pages.</p>
+                    </div>
+                    <div class="resume-item">
+                        <h4>Backend Integration</h4>
+                        <p>Connected Realtime Firebase Database for live project management.</p>
+                    </div>
+                    <div class="resume-item">
+                        <h4>JAMB 2026 Preparation</h4>
+                        <p>Currently studying for University Entrance - Computer Science path.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="card">
+                    <h3>Technical Skills</h3>
+                    <div class="skill-box">
+                        <div class="skill-info"><span>HTML / CSS</span><span>95%</span></div>
+                        <div class="skill-bar"><div class="skill-fill" style="width: 95%;"></div></div>
+                    </div>
+                    <div class="skill-box">
+                        <div class="skill-info"><span>JavaScript</span><span>80%</span></div>
+                        <div class="skill-bar"><div class="skill-fill" style="width: 80%;"></div></div>
+                    </div>
+                    <div class="skill-box">
+                        <div class="skill-info"><span>Firebase / Auth</span><span>85%</span></div>
+                        <div class="skill-bar"><div class="skill-fill" style="width: 85%;"></div></div>
+                    </div>
+                    <div class="skill-box">
+                        <div class="skill-info"><span>Forex Strategy</span><span>70%</span></div>
+                        <div class="skill-bar"><div class="skill-fill" style="width: 70%; background: #f59e0b; box-shadow: 0 0 10px #f59e0b;"></div></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-        const firebaseConfig = { apiKey: "AIzaSyAiK7MfkCK21BVJ2KOHhCYwVrx82Q2bg78", authDomain: "josh-intake.firebaseapp.com", databaseURL: "https://josh-intake-default-rtdb.firebaseio.com", projectId: "josh-intake" };
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAiK7MfkCK21BVJ2KOHhCYwVrx82Q2bg78",
+            authDomain: "josh-intake.firebaseapp.com",
+            databaseURL: "https://josh-intake-default-rtdb.firebaseio.com",
+            projectId: "josh-intake",
+            storageBucket: "josh-intake.firebasestorage.app",
+            messagingSenderId: "339460724072",
+            appId: "1:339460724072:web:709c71921e8ac64d3ef2dd"
+        };
+
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getDatabase(app);
+
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 document.getElementById('userEmail').innerText = user.email;
-                onValue(ref(db, 'projects/' + user.uid), (snapshot) => {
-                    document.getElementById('projCount').innerText = snapshot.val() ? Object.keys(snapshot.val()).length : 0;
+                document.getElementById('welcomeTitle').innerText = "Dashboard";
+                document.getElementById('userAvatar').innerText = user.email.charAt(0).toUpperCase();
+                
+                // Real-time project count
+                const projectRef = ref(db, 'projects/' + user.uid);
+                onValue(projectRef, (snapshot) => {
+                    const data = snapshot.val();
+                    document.getElementById('projCount').innerText = data ? Object.keys(data).length : 0;
                 });
-            } else { window.location.href = "login.html"; }
+            } else {
+                window.location.href = "login.html";
+            }
         });
-        document.getElementById('logoutBtn').onclick = () => signOut(auth).then(() => window.location.href = "index.html");
+
+        document.getElementById('logoutBtn').onclick = () => {
+            signOut(auth).then(() => window.location.href = "index.html");
+        };
     </script>
 </body>
 </html>
