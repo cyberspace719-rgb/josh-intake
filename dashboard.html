@@ -2,67 +2,252 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Josh Intake</title>
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        
         body {
-            margin: 0; padding: 0; font-family: sans-serif;
-            background-color: #0f172a; color: white; display: flex;
+            background-color: #02040a;
+            color: #f8fafc;
+            display: flex;
+            min-height: 100vh;
         }
-        /* Sidebar */
+
+        /* --- SIDEBAR (Desktop) --- */
         .sidebar {
-            width: 250px; height: 100vh; background: #02040a;
-            padding: 20px; border-right: 1px solid #1e293b;
+            width: 260px;
+            background: #0f172a;
+            border-right: 1px solid #1e293b;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100%;
         }
-        .logo { font-size: 1.5rem; font-weight: bold; color: #06b6d4; margin-bottom: 40px; }
-        .menu-item {
-            padding: 15px; color: #94a3b8; cursor: pointer; transition: 0.3s;
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #f8fafc;
+            margin-bottom: 50px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        .menu-item:hover, .menu-item.active {
-            background: #1e293b; color: #fff; border-radius: 8px;
-        }
+        .logo span { color: #f59e0b; } /* Orange Brand Color */
+
+        .nav-links { list-style: none; flex-grow: 1; }
+        .nav-links li { margin-bottom: 15px; }
         
-        /* Main Content */
-        .main { flex: 1; padding: 40px; }
-        h1 { font-size: 2rem; margin-bottom: 10px; }
-        p { color: #94a3b8; margin-bottom: 30px; }
-        
-        .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #94a3b8;
+            padding: 12px 15px;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background: rgba(6, 182, 212, 0.1);
+            color: #06b6d4;
+        }
+
+        .btn-logout {
+            margin-top: auto;
+            background: transparent;
+            border: 1px solid #ef4444;
+            color: #ef4444;
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+            width: 100%;
+        }
+        .btn-logout:hover { background: #ef4444; color: white; }
+
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            margin-left: 260px; /* Space for sidebar */
+            flex: 1;
+            padding: 40px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        h1 { font-size: 2rem; }
+        .user-email { color: #94a3b8; font-size: 0.9rem; }
+
+        /* --- CARDS GRID --- */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
         .card {
-            background: #1e293b; padding: 20px; border-radius: 10px; border: 1px solid #334155;
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid #334155;
+            position: relative;
+            overflow: hidden;
         }
-        .card h3 { color: #06b6d4; margin-bottom: 10px; }
+
+        /* Glowing effect on cards */
+        .card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+            background: #06b6d4;
+        }
+        .card.orange::before { background: #f59e0b; }
+        .card.purple::before { background: #8b5cf6; }
+
+        .card h3 { font-size: 0.9rem; color: #94a3b8; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+        .card .number { font-size: 2.5rem; font-weight: 700; color: white; }
+
+        /* --- MOBILE VIEW (Phone) --- */
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none; /* Hide sidebar on mobile */
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+                padding-bottom: 80px; /* Space for bottom menu */
+            }
+
+            /* Bottom Navigation for Mobile */
+            .mobile-nav {
+                position: fixed;
+                bottom: 0; left: 0; width: 100%;
+                background: #0f172a;
+                border-top: 1px solid #1e293b;
+                display: flex;
+                justify-content: space-around;
+                padding: 15px;
+                z-index: 100;
+            }
+
+            .mobile-nav a {
+                color: #94a3b8;
+                text-decoration: none;
+                font-size: 0.8rem;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            .mobile-nav a.active { color: #06b6d4; }
+        }
+
+        /* Hide mobile nav on desktop */
+        @media (min-width: 769px) {
+            .mobile-nav { display: none; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="sidebar">
-        <div class="logo">Josh Intake</div>
-        <div class="menu-item active">Dashboard</div>
-        <div class="menu-item">Projects</div>
-        <div class="menu-item">Clients</div>
-        <div class="menu-item">Settings</div>
-        <div class="menu-item" style="margin-top: auto; color: #f87171;" onclick="window.location.href='index.html'">Log Out</div>
-    </div>
+    <aside class="sidebar">
+        <div class="logo">Josh <span>Intake</span></div>
+        <ul class="nav-links">
+            <li><a href="#" class="active">Dashboard</a></li>
+            <li><a href="#">My Projects</a></li>
+            <li><a href="#">Clients</a></li>
+            <li><a href="#">Settings</a></li>
+        </ul>
+        <button id="logoutBtn" class="btn-logout">Log Out</button>
+    </aside>
 
-    <div class="main">
-        <h1>Welcome, User!</h1>
-        <p>Here is an overview of your web development projects.</p>
+    <main class="main-content">
+        <header>
+            <div>
+                <h1>Dashboard</h1>
+                <p class="user-email" id="userEmailDisplay">Loading user...</p>
+            </div>
+        </header>
 
-        <div class="card-grid">
+        <div class="grid">
             <div class="card">
                 <h3>Active Projects</h3>
-                <h1>3</h1>
+                <div class="number">3</div>
             </div>
-            <div class="card">
+            <div class="card orange">
                 <h3>Pending Tasks</h3>
-                <h1>12</h1>
+                <div class="number">12</div>
             </div>
-            <div class="card">
+            <div class="card purple">
                 <h3>Total Revenue</h3>
-                <h1>$4,200</h1>
+                <div class="number">$4,200</div>
             </div>
         </div>
-    </div>
+        
+        <div style="margin-top: 40px; padding: 25px; background: #1e293b; border-radius: 15px; border: 1px solid #334155;">
+            <h3 style="margin-bottom: 15px; color: white;">Recent Activity</h3>
+            <p style="color: #94a3b8; border-bottom: 1px solid #334155; padding-bottom: 10px; margin-bottom: 10px;">New client "TechCorp" added.</p>
+            <p style="color: #94a3b8; border-bottom: 1px solid #334155; padding-bottom: 10px; margin-bottom: 10px;">Project "Alpha" status updated to Complete.</p>
+            <p style="color: #94a3b8;">Invoice #0042 sent successfully.</p>
+        </div>
+    </main>
 
+    <nav class="mobile-nav">
+        <a href="#" class="active">🏠 Home</a>
+        <a href="#">🚀 Projects</a>
+        <a href="#">⚙️ Settings</a>
+        <a href="#" id="mobileLogout">🚪 Logout</a>
+    </nav>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        // YOUR FIREBASE KEYS
+        const firebaseConfig = {
+            apiKey: "AIzaSyAiK7MfkCK21BVJ2KOHhCYwVrx82Q2bg78",
+            authDomain: "josh-intake.firebaseapp.com",
+            projectId: "josh-intake",
+            storageBucket: "josh-intake.firebasestorage.app",
+            messagingSenderId: "339460724072",
+            appId: "1:339460724072:web:709c71921e8ac64d3ef2dd"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // 1. Check if User is Logged In
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in, update the UI
+                console.log("User found:", user.email);
+                document.getElementById('userEmailDisplay').innerText = "Logged in as: " + user.email;
+            } else {
+                // No user is signed in, kick them back to login page
+                window.location.href = "login.html";
+            }
+        });
+
+        // 2. Logout Function
+        const logoutAction = () => {
+            signOut(auth).then(() => {
+                // Sign-out successful.
+                window.location.href = "index.html";
+            }).catch((error) => {
+                alert("Error signing out");
+            });
+        };
+
+        // Attach Logout to Buttons
+        document.getElementById('logoutBtn').addEventListener('click', logoutAction);
+        document.getElementById('mobileLogout').addEventListener('click', logoutAction);
+    </script>
 </body>
 </html>
