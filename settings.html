@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Josh Intake</title>
+    <style>
+        /* Reuse Dashboard Styles for consistency */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: #02040a; color: white; display: flex; height: 100vh; overflow: hidden; }
+        
+        .sidebar { width: 260px; background: #0f172a; border-right: 1px solid #1e293b; display: flex; flex-direction: column; padding: 20px; }
+        .brand { font-size: 1.4rem; font-weight: bold; margin-bottom: 40px; color: white; }
+        .brand span { color: #06b6d4; }
+        
+        .menu-item { padding: 12px 15px; margin-bottom: 5px; color: #94a3b8; cursor: pointer; border-radius: 8px; transition: 0.3s; display: flex; gap: 10px; }
+        .menu-item:hover { background: #1e293b; color: white; }
+        .menu-item.active { background: #1e293b; color: white; border-left: 3px solid #06b6d4; }
+        
+        /* Settings Specific Styles */
+        .main-content { flex: 1; padding: 40px; overflow-y: auto; }
+        h1 { margin-bottom: 30px; font-size: 2rem; }
+        
+        .settings-card {
+            background: #0f172a; border: 1px solid #1e293b; border-radius: 15px;
+            padding: 30px; max-width: 600px; margin-bottom: 30px;
+        }
+        .settings-card h3 { color: #06b6d4; margin-bottom: 20px; border-bottom: 1px solid #1e293b; padding-bottom: 10px; }
+        
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; color: #94a3b8; margin-bottom: 8px; font-size: 0.9rem; }
+        .form-group input {
+            width: 100%; padding: 12px; background: #02040a; border: 1px solid #334155;
+            color: white; border-radius: 8px; outline: none;
+        }
+        .form-group input:focus { border-color: #06b6d4; }
+        .form-group input:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .btn-save {
+            padding: 12px 25px; background: #06b6d4; color: white; border: none;
+            border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s;
+        }
+        .btn-save:hover { background: #0891b2; }
+
+        .btn-logout { margin-top: auto; color: #f87171; }
+        
+        @media (max-width: 768px) {
+            body { flex-direction: column; height: auto; }
+            .sidebar { width: 100%; overflow-x: auto; flex-direction: row; padding: 10px; }
+            .brand { display: none; }
+            .main-content { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="brand">Josh <span>Intake</span></div>
+        <div class="menu-item" onclick="window.location.href='dashboard.html'">📊 Dashboard</div>
+        <div class="menu-item" onclick="window.location.href='projects.html'">🚀 Projects</div>
+        <div class="menu-item" onclick="alert('Clients page coming soon!')">👥 Clients</div>
+        <div class="menu-item active">⚙️ Settings</div>
+        <div class="menu-item btn-logout" id="logoutBtn">🚪 Log Out</div>
+    </div>
+
+    <div class="main-content">
+        <h1>Account Settings</h1>
+
+        <div class="settings-card">
+            <h3>Profile Information</h3>
+            <div class="form-group">
+                <label>Email Address (Cannot be changed)</label>
+                <input type="text" id="emailDisplay" disabled value="Loading...">
+            </div>
+            <div class="form-group">
+                <label>Display Name</label>
+                <input type="text" id="displayNameInput" placeholder="Enter your name">
+            </div>
+            <button class="btn-save" id="saveProfileBtn">Save Changes</button>
+        </div>
+
+        <div class="settings-card">
+            <h3>Security</h3>
+            <p style="color: #94a3b8; margin-bottom: 15px; font-size: 0.9rem;">Need to update your security?</p>
+            <button class="btn-save" style="background: #334155;" id="resetPasswordBtn">Send Password Reset Email</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, updateProfile, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAiK7MfkCK21BVJ2KOHhCYwVrx82Q2bg78",
+            authDomain: "josh-intake.firebaseapp.com",
+            projectId: "josh-intake",
+            storageBucket: "josh-intake.firebasestorage.app",
+            messagingSenderId: "339460724072",
+            appId: "1:339460724072:web:709c71921e8ac64d3ef2dd"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // 1. LOAD USER DATA
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.getElementById('emailDisplay').value = user.email;
+                if(user.displayName) {
+                    document.getElementById('displayNameInput').value = user.displayName;
+                }
+            } else {
+                window.location.href = "login.html";
+            }
+        });
+
+        // 2. SAVE PROFILE (Update Name)
+        document.getElementById('saveProfileBtn').addEventListener('click', () => {
+            const user = auth.currentUser;
+            const newName = document.getElementById('displayNameInput').value;
+
+            if (user && newName) {
+                updateProfile(user, { displayName: newName }).then(() => {
+                    alert("Profile Updated! Your dashboard will now say 'Welcome " + newName + "'");
+                }).catch((error) => {
+                    alert("Error: " + error.message);
+                });
+            }
+        });
+
+        // 3. RESET PASSWORD
+        document.getElementById('resetPasswordBtn').addEventListener('click', () => {
+            const email = auth.currentUser.email;
+            if(confirm("Send password reset email to " + email + "?")) {
+                sendPasswordResetEmail(auth, email).then(() => {
+                    alert("Email sent! Check your inbox.");
+                }).catch((error) => {
+                    alert("Error: " + error.message);
+                });
+            }
+        });
+
+        // 4. LOGOUT
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            signOut(auth).then(() => window.location.href = "index.html");
+        });
+    </script>
+</body>
+</html>
