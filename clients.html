@@ -7,29 +7,15 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, sans-serif; }
         body { background-color: #02040a; color: white; display: flex; height: 100vh; overflow: hidden; }
-        
         .sidebar { width: 260px; background: #0f172a; border-right: 1px solid #1e293b; display: flex; flex-direction: column; padding: 20px; flex-shrink: 0; }
         .brand { font-size: 1.4rem; font-weight: bold; margin-bottom: 40px; }
         .brand span { color: #06b6d4; }
-        
-        .menu-item { padding: 12px 15px; margin-bottom: 5px; color: #94a3b8; cursor: pointer; border-radius: 8px; transition: 0.3s; display: flex; align-items: center; gap: 12px; }
+        .menu-item { padding: 12px 15px; margin-bottom: 5px; color: #94a3b8; cursor: pointer; border-radius: 8px; display: flex; align-items: center; gap: 12px; }
         .menu-item:hover, .menu-item.active { background: #1e293b; color: #fff; }
         .menu-item.active { border-left: 3px solid #06b6d4; }
-        
         .main-content { flex-grow: 1; padding: 40px; overflow-y: auto; height: 100vh; }
-        
         .client-card { background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
-        .client-info { display: flex; align-items: center; gap: 15px; }
-        .client-avatar { width: 45px; height: 45px; border-radius: 50%; background: #334155; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-        
-        .btn-whatsapp { background: #22c55e; color: white; padding: 8px 15px; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: bold; }
-        .logout-btn { margin-top: auto; padding: 12px 15px; color: #f87171; cursor: pointer; display: flex; align-items: center; gap: 12px; }
-
-        @media (max-width: 768px) {
-            body { flex-direction: column; }
-            .sidebar { width: 100%; height: auto; flex-direction: row; overflow-x: auto; padding: 10px; }
-            .main-content { height: calc(100vh - 70px); }
-        }
+        .btn-whatsapp { background: #22c55e; color: white; padding: 8px 15px; border-radius: 6px; text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -38,27 +24,14 @@
         <div class="menu-item" onclick="window.location.href='dashboard.html'">📊 Dashboard</div>
         <div class="menu-item" onclick="window.location.href='projects.html'">🚀 Projects</div>
         <div class="menu-item active" onclick="window.location.href='clients.html'">👥 Clients</div>
+        <div class="menu-item" onclick="window.location.href='messages.html'">💬 Messages</div>
         <div class="menu-item" onclick="window.location.href='settings.html'">⚙️ Settings</div>
-        <div class="logout-btn" id="logoutBtn">🚪 Log Out</div>
+        <div style="margin-top:auto; color:#f87171; cursor:pointer;" onclick="window.location.href='index.html'">🚪 Log Out</div>
     </div>
-
     <div class="main-content">
         <h1>Clients</h1>
-        <p style="color: #94a3b8; margin-bottom: 30px;">Direct connection to your business partners.</p>
-
         <div class="client-card">
-            <div class="client-info">
-                <div class="client-avatar" style="background: #ea580c;">N</div>
-                <div><h4>Nike Store Nigeria</h4><p style="color: #94a3b8; font-size: 0.8rem;">E-Commerce Client</p></div>
-            </div>
-            <a href="https://wa.me/234000000000" class="btn-whatsapp">WhatsApp</a>
-        </div>
-
-        <div class="client-card">
-            <div class="client-info">
-                <div class="client-avatar" style="background: #6366f1;">L</div>
-                <div><h4>Lagos Homes</h4><p style="color: #94a3b8; font-size: 0.8rem;">Real Estate Client</p></div>
-            </div>
+            <div><h4>Nike Store Nigeria</h4><p>E-Commerce Project</p></div>
             <a href="https://wa.me/234000000000" class="btn-whatsapp">WhatsApp</a>
         </div>
     </div>
