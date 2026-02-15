@@ -3,123 +3,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Josh Intake | The Professional Command Center</title>
+    <title>Josh Intake | Professional Command Center</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        /* Existing Styles ... */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, sans-serif; }
+        body { background-color: #02040a; color: white; line-height: 1.6; overflow-x: hidden; }
+        .bg-glow { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% -20%, #1e293b, #02040a); z-index: -1; }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 10%; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(10px); border-bottom: 1px solid #1e293b; position: sticky; top: 0; z-index: 1000; }
+        .logo { font-size: 1.5rem; font-weight: 800; } .logo span { color: #06b6d4; }
+        .btn { padding: 12px 24px; border-radius: 8px; font-weight: 600; text-decoration: none; cursor: pointer; border: none; }
+        .btn-primary { background: #06b6d4; color: #fff; }
+
+        /* --- NEW: Contact Modal Styles --- */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 2000; }
+        .modal-content { background: #0f172a; padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; border: 1px solid #06b6d4; }
+        .modal-content input, .modal-content textarea { width: 100%; padding: 12px; margin-top: 15px; background: #02040a; border: 1px solid #1e293b; color: white; border-radius: 8px; outline: none; }
         
-        body { 
-            background-color: #02040a; 
-            color: white; 
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* --- BACKGROUND GRADIENT --- */
-        .bg-glow {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% -20%, #1e293b, #02040a);
-            z-index: -1;
-        }
-
-        /* --- NAVBAR --- */
-        nav {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 20px 10%; background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(10px); border-bottom: 1px solid #1e293b;
-            position: sticky; top: 0; z-index: 1000;
-        }
-        .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: -1px; }
-        .logo span { color: #06b6d4; }
-        .nav-links a { color: #94a3b8; text-decoration: none; margin-left: 25px; font-size: 0.9rem; transition: 0.3s; }
-        .nav-links a:hover { color: #06b6d4; }
-
-        /* --- HERO SECTION --- */
-        header {
-            height: 90vh; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; text-align: center;
-            padding: 0 20px;
-        }
-        header h1 { 
-            font-size: clamp(2.5rem, 8vw, 4.5rem); font-weight: 800; 
-            background: linear-gradient(to bottom, #fff, #94a3b8);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            margin-bottom: 20px;
-        }
-        header p { color: #94a3b8; max-width: 600px; font-size: 1.1rem; margin-bottom: 40px; }
-
-        .cta-group { display: flex; gap: 15px; }
-        .btn {
-            padding: 14px 28px; border-radius: 8px; font-weight: 600; 
-            text-decoration: none; transition: 0.3s; font-size: 1rem;
-        }
-        .btn-primary { background: #06b6d4; color: #fff; box-shadow: 0 0 20px rgba(6, 182, 212, 0.3); }
-        .btn-primary:hover { transform: translateY(-3px); background: #0891b2; }
-        .btn-secondary { border: 1px solid #1e293b; color: #fff; background: rgba(255,255,255,0.05); }
-        .btn-secondary:hover { background: rgba(255,255,255,0.1); }
-
-        /* --- FEATURES SECTION --- */
-        .features { padding: 100px 10%; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-        .feat-card {
-            background: rgba(15, 23, 42, 0.5); border: 1px solid #1e293b;
-            padding: 40px; border-radius: 20px; transition: 0.3s;
-        }
-        .feat-card:hover { border-color: #06b6d4; transform: scale(1.02); }
-        .feat-icon { font-size: 2rem; margin-bottom: 20px; display: block; }
-        .feat-card h3 { margin-bottom: 15px; font-size: 1.3rem; }
-        .feat-card p { color: #94a3b8; font-size: 0.95rem; }
-
-        /* --- FOOTER --- */
-        footer { padding: 60px 10%; border-top: 1px solid #1e293b; text-align: center; color: #475569; }
-
-        @media (max-width: 768px) {
-            .nav-links { display: none; }
-            header h1 { font-size: 2.8rem; }
-            .cta-group { flex-direction: column; width: 100%; }
-        }
+        /* Floating Chat Button */
+        .floating-chat { position: fixed; bottom: 30px; right: 30px; background: #06b6d4; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; box-shadow: 0 0 20px rgba(6, 182, 212, 0.5); z-index: 999; }
     </style>
 </head>
 <body>
-
     <div class="bg-glow"></div>
-
     <nav>
         <div class="logo">Josh <span>Intake</span></div>
-        <div class="nav-links">
-            <a href="#features">Features</a>
-            <a href="login.html" class="btn btn-secondary" style="padding: 8px 18px;">Sign In</a>
-        </div>
+        <div><a href="login.html" class="btn btn-primary">Sign In</a></div>
     </nav>
 
-    <header>
-        <h1>Next-Gen Project Management.</h1>
-        <p>A unified command center for developers, traders, and entrepreneurs. Manage projects, clients, and communications in one secure vault.</p>
-        <div class="cta-group">
-            <a href="signup.html" class="btn btn-primary">Start Building Free</a>
-            <a href="#features" class="btn btn-secondary">Learn More</a>
+    <header style="height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px;">
+        <h1>Your Business, Optimized.</h1>
+        <p style="color: #94a3b8; max-width: 600px; margin-bottom: 30px;">Manage your Forex goals, software projects, and client communication in one secure, high-speed dashboard.</p>
+        <div style="display: flex; gap: 15px;">
+            <a href="signup.html" class="btn btn-primary">Get Started</a>
+            <button class="btn" style="background: #1e293b; color: white;" onclick="openContact()">Contact Me</button>
         </div>
     </header>
 
-    <section class="features" id="features">
-        <div class="feat-card">
-            <span class="feat-icon">🚀</span>
-            <h3>Project Database</h3>
-            <p>Built with Realtime Cloud Database technology. Add, track, and manage your projects from anywhere in the world.</p>
-        </div>
-        <div class="feat-card">
-            <span class="feat-icon">💬</span>
-            <h3>Real-time Chat</h3>
-            <p>Collaborate with clients or other users instantly. Low-latency communication with built-in notification systems.</p>
-        </div>
-        <div class="feat-card">
-            <span class="feat-icon">📊</span>
-            <h3>Goal Tracking</h3>
-            <p>Visualise your progress. Whether it's Forex goals or development milestones, track every step with precision.</p>
-        </div>
-    </section>
+    <div class="floating-chat" onclick="openContact()">💬</div>
 
-    <footer>
-        <p>&copy; 2026 Josh Intake. Built for the future of ucheomajoshua0.</p>
-    </footer>
+    <div class="modal" id="contactModal">
+        <div class="modal-content">
+            <h3>Send a Message</h3>
+            <p style="color: #94a3b8; font-size: 0.8rem;">I'll receive this in my admin dashboard instantly.</p>
+            <input type="text" id="visitorName" placeholder="Your Name">
+            <textarea id="visitorMsg" placeholder="How can I help you?" rows="4"></textarea>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" id="sendVisitBtn">Send Message</button>
+            <button style="background:none; border:none; color:#94a3b8; width:100%; margin-top:15px; cursor:pointer;" onclick="closeContact()">Close</button>
+        </div>
+    </div>
 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, push, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAiK7MfkCK21BVJ2KOHhCYwVrx82Q2bg78",
+            authDomain: "josh-intake.firebaseapp.com",
+            databaseURL: "https://josh-intake-default-rtdb.firebaseio.com",
+            projectId: "josh-intake",
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        window.openContact = () => document.getElementById('contactModal').style.display = 'flex';
+        window.closeContact = () => document.getElementById('contactModal').style.display = 'none';
+
+        document.getElementById('sendVisitBtn').onclick = async () => {
+            const name = document.getElementById('visitorName').value;
+            const msg = document.getElementById('visitorMsg').value;
+
+            if(name && msg) {
+                await push(ref(db, 'messages'), {
+                    text: `[INQUIRY FROM ${name}]: ${msg}`,
+                    senderId: "visitor",
+                    senderEmail: "Visitor",
+                    timestamp: serverTimestamp()
+                });
+                alert("Message sent! I will check it in my dashboard.");
+                closeContact();
+                document.getElementById('visitorName').value = '';
+                document.getElementById('visitorMsg').value = '';
+            } else {
+                alert("Please fill in both fields.");
+            }
+        };
+    </script>
 </body>
 </html>
