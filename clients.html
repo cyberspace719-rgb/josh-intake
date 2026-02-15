@@ -5,111 +5,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clients - Josh Intake</title>
     <style>
-        /* Shared Styles */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, sans-serif; }
         body { background-color: #02040a; color: white; display: flex; height: 100vh; overflow: hidden; }
-        .sidebar { width: 260px; background: #0f172a; border-right: 1px solid #1e293b; display: flex; flex-direction: column; padding: 20px; }
-        .brand { font-size: 1.4rem; font-weight: bold; margin-bottom: 40px; color: white; }
+        
+        .sidebar { width: 260px; background: #0f172a; border-right: 1px solid #1e293b; display: flex; flex-direction: column; padding: 20px; flex-shrink: 0; }
+        .brand { font-size: 1.4rem; font-weight: bold; margin-bottom: 40px; }
         .brand span { color: #06b6d4; }
-        .menu-item { padding: 12px 15px; margin-bottom: 5px; color: #94a3b8; cursor: pointer; border-radius: 8px; transition: 0.3s; display: flex; gap: 10px; }
-        .menu-item:hover { background: #1e293b; color: white; }
-        .menu-item.active { background: #1e293b; color: white; border-left: 3px solid #06b6d4; }
-        .main-content { flex: 1; padding: 40px; overflow-y: auto; }
-
-        /* Client List Styles */
-        .client-list { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
         
-        .client-card {
-            background: #0f172a; border: 1px solid #1e293b; border-radius: 12px;
-            padding: 20px; display: flex; align-items: center; justify-content: space-between;
-            transition: 0.3s;
-        }
-        .client-card:hover { transform: translateX(5px); border-color: #06b6d4; }
-
-        .client-info { display: flex; align-items: center; gap: 20px; }
-        .client-avatar { 
-            width: 50px; height: 50px; background: #334155; border-radius: 50%; 
-            display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem; color: #cbd5e1;
-        }
-        .client-details h4 { font-size: 1.1rem; margin-bottom: 5px; }
-        .client-details p { color: #94a3b8; font-size: 0.9rem; }
-
-        .client-actions { display: flex; gap: 10px; }
-        .btn-action { 
-            padding: 8px 15px; border-radius: 6px; border: none; cursor: pointer; font-weight: 600; text-decoration: none; font-size: 0.9rem;
-        }
-        .btn-email { background: #1e293b; color: white; }
-        .btn-whatsapp { background: #22c55e; color: white; display: flex; align-items: center; gap: 5px; }
+        .menu-item { padding: 12px 15px; margin-bottom: 5px; color: #94a3b8; cursor: pointer; border-radius: 8px; transition: 0.3s; display: flex; align-items: center; gap: 12px; }
+        .menu-item:hover, .menu-item.active { background: #1e293b; color: #fff; }
+        .menu-item.active { border-left: 3px solid #06b6d4; }
         
+        .main-content { flex-grow: 1; padding: 40px; overflow-y: auto; height: 100vh; }
+        
+        .client-card { background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .client-info { display: flex; align-items: center; gap: 15px; }
+        .client-avatar { width: 45px; height: 45px; border-radius: 50%; background: #334155; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        
+        .btn-whatsapp { background: #22c55e; color: white; padding: 8px 15px; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: bold; }
+        .logout-btn { margin-top: auto; padding: 12px 15px; color: #f87171; cursor: pointer; display: flex; align-items: center; gap: 12px; }
+
         @media (max-width: 768px) {
-            body { flex-direction: column; height: auto; }
-            .sidebar { width: 100%; overflow-x: auto; flex-direction: row; padding: 10px; }
-            .brand { display: none; }
-            .main-content { padding: 20px; }
-            .client-card { flex-direction: column; align-items: flex-start; gap: 15px; }
-            .client-actions { width: 100%; justify-content: space-between; }
+            body { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; flex-direction: row; overflow-x: auto; padding: 10px; }
+            .main-content { height: calc(100vh - 70px); }
         }
     </style>
 </head>
 <body>
-
     <div class="sidebar">
         <div class="brand">Josh <span>Intake</span></div>
         <div class="menu-item" onclick="window.location.href='dashboard.html'">📊 Dashboard</div>
         <div class="menu-item" onclick="window.location.href='projects.html'">🚀 Projects</div>
-        <div class="menu-item active">👥 Clients</div>
+        <div class="menu-item active" onclick="window.location.href='clients.html'">👥 Clients</div>
         <div class="menu-item" onclick="window.location.href='settings.html'">⚙️ Settings</div>
-        <div class="menu-item" style="margin-top: auto; color: #f87171;" onclick="window.location.href='index.html'">🚪 Log Out</div>
+        <div class="logout-btn" id="logoutBtn">🚪 Log Out</div>
     </div>
 
     <div class="main-content">
-        <h1>Client Management</h1>
-        <p style="color: #94a3b8; margin-bottom: 30px;">Manage your relationships and contracts.</p>
+        <h1>Clients</h1>
+        <p style="color: #94a3b8; margin-bottom: 30px;">Direct connection to your business partners.</p>
 
-        <div class="client-list">
-            
-            <div class="client-card">
-                <div class="client-info">
-                    <div class="client-avatar" style="background: #ea580c;">N</div>
-                    <div class="client-details">
-                        <h4>Nike Store Nigeria</h4>
-                        <p>Project: E-Commerce Redesign</p>
-                    </div>
-                </div>
-                <div class="client-actions">
-                    <button class="btn-action btn-email">Email</button>
-                    <a href="https://wa.me/" class="btn-action btn-whatsapp">Chat on WhatsApp</a>
-                </div>
+        <div class="client-card">
+            <div class="client-info">
+                <div class="client-avatar" style="background: #ea580c;">N</div>
+                <div><h4>Nike Store Nigeria</h4><p style="color: #94a3b8; font-size: 0.8rem;">E-Commerce Client</p></div>
             </div>
+            <a href="https://wa.me/234000000000" class="btn-whatsapp">WhatsApp</a>
+        </div>
 
-            <div class="client-card">
-                <div class="client-info">
-                    <div class="client-avatar" style="background: #6366f1;">L</div>
-                    <div class="client-details">
-                        <h4>Lagos Homes</h4>
-                        <p>Project: Real Estate App</p>
-                    </div>
-                </div>
-                <div class="client-actions">
-                    <button class="btn-action btn-email">Email</button>
-                    <a href="https://wa.me/" class="btn-action btn-whatsapp">Chat on WhatsApp</a>
-                </div>
+        <div class="client-card">
+            <div class="client-info">
+                <div class="client-avatar" style="background: #6366f1;">L</div>
+                <div><h4>Lagos Homes</h4><p style="color: #94a3b8; font-size: 0.8rem;">Real Estate Client</p></div>
             </div>
-
-            <div class="client-card">
-                <div class="client-info">
-                    <div class="client-avatar" style="background: #06b6d4;">D</div>
-                    <div class="client-details">
-                        <h4>Dr. Adebayo</h4>
-                        <p>Project: Medical Portfolio</p>
-                    </div>
-                </div>
-                <div class="client-actions">
-                    <button class="btn-action btn-email">Email</button>
-                    <a href="https://wa.me/" class="btn-action btn-whatsapp">Chat on WhatsApp</a>
-                </div>
-            </div>
-
+            <a href="https://wa.me/234000000000" class="btn-whatsapp">WhatsApp</a>
         </div>
     </div>
 </body>
