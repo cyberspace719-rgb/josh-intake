@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Josh Intake</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            /* Dark Background */
+            background-color: #02040a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* The Main Card Container */
+        .container {
+            position: relative;
+            width: 850px;
+            height: 500px;
+            background: #0f172a;
+            box-shadow: 0 0 30px rgba(6, 182, 212, 0.4); /* Glowing Cyan Shadow */
+            border-radius: 15px;
+            overflow: hidden;
+            display: flex;
+        }
+
+        /* Glowing Border Effect */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: linear-gradient(45deg, #06b6d4, #000000, #06b6d4);
+            z-index: -1;
+            border-radius: 15px;
+            filter: blur(10px);
+        }
+
+        /* --- LEFT SIDE (LOGIN FORM) --- */
+        .login-section {
+            width: 55%;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: white;
+            z-index: 2; 
+        }
+
+        .login-section h2 {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px 0;
+            font-size: 1rem;
+            color: #fff;
+            border: none;
+            border-bottom: 2px solid #334155;
+            background: transparent;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .input-group label {
+            position: absolute;
+            top: 10px;
+            left: 0;
+            font-size: 1rem;
+            color: #94a3b8;
+            pointer-events: none;
+            transition: 0.3s;
+        }
+
+        /* Input Animation */
+        .input-group input:focus ~ label,
+        .input-group input:valid ~ label {
+            top: -20px;
+            font-size: 0.8rem;
+            color: #06b6d4;
+        }
+
+        .input-group input:focus {
+            border-bottom: 2px solid #06b6d4;
+        }
+
+        /* The Button */
+        .btn-login {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(90deg, #0891b2, #06b6d4);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.4);
+            transition: 0.3s;
+        }
+
+        .btn-login:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 20px rgba(6, 182, 212, 0.6);
+        }
+
+        .signup-link {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+
+        .signup-link a {
+            color: #06b6d4;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* --- RIGHT SIDE (WELCOME MESSAGE) --- */
+        .welcome-section {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 55%;
+            height: 100%;
+            background: linear-gradient(135deg, #0e7490, #06b6d4);
+            clip-path: polygon(25% 0, 100% 0, 100% 100%, 0% 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-end;
+            text-align: right;
+            padding-right: 50px;
+            padding-left: 100px;
+            color: white;
+        }
+
+        .welcome-section h1 {
+            font-size: 2.5rem;
+            line-height: 1.2;
+            margin-bottom: 15px;
+        }
+        
+        .welcome-section h1 span {
+            color: #cffafe; /* Lighter Cyan */
+        }
+
+        .welcome-section p {
+            font-size: 1rem;
+            color: #ecfeff;
+            max-width: 300px;
+            opacity: 0.9;
+        }
+
+        /* Responsive Mobile View */
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+                height: auto;
+                flex-direction: column;
+            }
+            
+            .welcome-section {
+                display: none; 
+            }
+
+            .login-section {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="login-section">
+            <h2>Login</h2>
+            <form>
+                <div class="input-group">
+                    <input type="text" required>
+                    <label>Username</label>
+                </div>
+                <div class="input-group">
+                    <input type="password" required>
+                    <label>Password</label>
+                </div>
+                <button type="button" class="btn-login">Login</button>
+                <p class="signup-link">Don't have an account? <a href="#">Sign up</a></p>
+            </form>
+        </div>
+
+        <div class="welcome-section">
+            <h1>WELCOME<br>BACK TO<br><span>JOSH INTAKE!</span></h1>
+            <p>Access your dashboard to manage your web projects and software designs.</p>
+        </div>
+    </div>
+
+</body>
+</html>
