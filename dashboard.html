@@ -5,22 +5,79 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Console | Josh Intake</title>
     <style>
+        /* --- RESET & BASIC SETUP --- */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', -apple-system, sans-serif; }
         body { background-color: #0b0f1a; color: #e2e8f0; display: flex; height: 100vh; overflow: hidden; }
         
-        /* Navigation Sidebar */
-        .sidebar { width: 260px; background: #111827; border-right: 1px solid #1f2937; display: flex; flex-direction: column; padding: 24px; flex-shrink: 0; }
-        .brand { font-size: 1.2rem; font-weight: 800; color: #fff; margin-bottom: 48px; letter-spacing: -0.5px; }
+        /* --- SIDEBAR (Fixed Styles) --- */
+        .sidebar { 
+            width: 260px; 
+            background: #111827; 
+            border-right: 1px solid #1f2937; 
+            display: flex; 
+            flex-direction: column; 
+            padding: 24px; 
+            flex-shrink: 0; 
+        }
+
+        /* Fixed: Reduced font weight and size for a cleaner look */
+        .brand { 
+            font-size: 1.1rem; 
+            font-weight: 700; 
+            color: #fff; 
+            margin-bottom: 40px; 
+            letter-spacing: -0.5px; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+        }
         .brand span { color: #06b6d4; }
         
-        .nav-section { margin-bottom: 32px; }
-        .nav-label { font-size: 0.65rem; color: #6b7280; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; display: block; font-weight: 700; }
-        .menu-item { padding: 12px 16px; margin-bottom: 4px; color: #9ca3af; cursor: pointer; border-radius: 8px; transition: 0.2s; display: flex; align-items: center; gap: 12px; text-decoration: none; font-size: 0.9rem; }
-        .menu-item:hover { background: #1f2937; color: #fff; }
-        .menu-item.active { background: #06b6d4; color: #fff; font-weight: 600; }
+        .nav-section { margin-bottom: 32px; display: flex; flex-direction: column; gap: 4px; }
+        
+        .nav-label { 
+            font-size: 0.65rem; 
+            color: #6b7280; 
+            text-transform: uppercase; 
+            letter-spacing: 1.5px; 
+            margin-bottom: 12px; 
+            display: block; 
+            font-weight: 700; 
+            padding-left: 12px; 
+        }
 
-        /* Dashboard Workspace */
-        .workspace { flex-grow: 1; padding: 40px; overflow-y: auto; background: #0b0f1a; }
+        /* Fixed: Improved alignment for 'Clients' and other items */
+        .menu-item { 
+            padding: 10px 16px; 
+            color: #9ca3af; 
+            cursor: pointer; 
+            border-radius: 8px; 
+            transition: all 0.2s ease; 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            text-decoration: none; 
+            font-size: 0.9rem; 
+            border-left: 3px solid transparent; /* Keeps alignment steady on hover */
+        }
+        .menu-item:hover { background: #1f2937; color: #fff; }
+        .menu-item.active { 
+            background: #1f2937; 
+            color: #06b6d4; 
+            border-left: 3px solid #06b6d4; 
+        }
+
+        /* --- WORKSPACE (Fixed Width Issues) --- */
+        .workspace { 
+            flex: 1; 
+            width: 100%; /* Forces content to take full width */
+            padding: 40px; 
+            overflow-y: auto; /* Enables scrolling for this section */
+            background: #0b0f1a; 
+            display: flex; 
+            flex-direction: column; 
+        }
+
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
         .header h1 { font-size: 1.5rem; font-weight: 700; color: #fff; }
         
@@ -29,7 +86,7 @@
         .pulse-dot { width: 6px; height: 6px; background: currentColor; border-radius: 50%; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
 
-        /* Analytics Grid */
+        /* Metrics Grid */
         .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; margin-bottom: 40px; }
         .metric-card { background: #111827; padding: 24px; border-radius: 12px; border: 1px solid #1f2937; }
         .metric-card p { font-size: 0.75rem; color: #9ca3af; margin-bottom: 12px; font-weight: 600; text-transform: uppercase; }
@@ -37,11 +94,11 @@
 
         /* Data Tables */
         .content-box { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 24px; }
-        .box-title { margin-bottom: 20px; font-size: 1rem; font-weight: 700; color: #fff; display: flex; justify-content: space-between; }
+        .box-title { margin-bottom: 20px; font-size: 1rem; font-weight: 700; color: #fff; }
         table { width: 100%; border-collapse: collapse; }
         th { text-align: left; font-size: 0.7rem; color: #6b7280; padding: 12px; border-bottom: 1px solid #1f2937; text-transform: uppercase; }
         td { padding: 16px 12px; font-size: 0.85rem; border-bottom: 1px solid #1f2937; color: #d1d5db; }
-        .status-tag { padding: 4px 10px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; background: #1f2937; }
+        .status-tag { padding: 4px 10px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; background: #1f2937; border: 1px solid #374151; }
 
         @media (max-width: 768px) { body { flex-direction: column; } .sidebar { width: 100%; height: auto; } }
     </style>
@@ -51,53 +108,53 @@
         <div class="brand">JOSH<span>INTAKE</span></div>
         
         <div class="nav-section">
-            <span class="nav-label">Main Operations</span>
-            <a href="dashboard.html" class="menu-item active">📊 Overview</a>
+            <span class="nav-label">Management</span>
+            <a href="dashboard.html" class="menu-item active">📊 System Overview</a>
             <a href="projects.html" class="menu-item">📁 Project Registry</a>
             <a href="clients.html" class="menu-item">👥 Client Directory</a>
         </div>
 
         <div class="nav-section">
-            <span class="nav-label">Communications</span>
+            <span class="nav-label">Operations</span>
             <a href="messages.html" class="menu-item">💬 System Messages</a>
             <a href="settings.html" class="menu-item">⚙️ Settings</a>
         </div>
 
         <div style="margin-top: auto;">
-            <a href="index.html" class="menu-item" style="color: #ef4444;">🚪 Sign Out</a>
+            <a href="index.html" class="menu-item" style="color: #ef4444;">🚪 Terminate Session</a>
         </div>
     </aside>
 
     <main class="workspace">
         <header class="header">
             <div>
-                <h1>System Overview</h1>
-                <p style="color: #9ca3af; font-size: 0.9rem; margin-top: 4px;">Josh Intake Operational Console</p>
+                <h1>System Console</h1>
+                <p style="color: #9ca3af; font-size: 0.9rem; margin-top: 4px;">Operational Environment for Josh Intake</p>
             </div>
-            <div class="system-status"><div class="pulse-dot"></div> FIREBASE ACTIVE</div>
+            <div class="system-status"><div class="pulse-dot"></div> CORE API ACTIVE</div>
         </header>
 
         <section class="metrics-grid">
             <div class="metric-card">
-                <p>Registry Items</p>
+                <p>Registry Objects</p>
                 <div class="value" id="projCount">--</div>
             </div>
             <div class="metric-card">
-                <p>Pending Inquiries</p>
-                <div class="value">04</div>
+                <p>System Latency</p>
+                <div class="value">14ms</div>
             </div>
             <div class="metric-card">
-                <p>Uptime Score</p>
+                <p>Uptime Percentage</p>
                 <div class="value">99.9%</div>
             </div>
         </section>
 
         <section class="content-box">
-            <div class="box-title">Recent Registry Updates</div>
+            <div class="box-title">System Activity Log</div>
             <table>
                 <thead>
                     <tr>
-                        <th>Resource Name</th>
+                        <th>Event Source</th>
                         <th>Classification</th>
                         <th>Status</th>
                         <th>Synchronized</th>
@@ -105,15 +162,15 @@
                 </thead>
                 <tbody id="registryTable">
                     <tr>
-                        <td>System Initialization</td>
-                        <td>Core Logic</td>
-                        <td><span class="status-tag">STABLE</span></td>
+                        <td>Console Authentication</td>
+                        <td>Security Node</td>
+                        <td><span class="status-tag">VERIFIED</span></td>
                         <td>Just now</td>
                     </tr>
                     <tr>
-                        <td>Database Node</td>
-                        <td>Firebase RTDB</td>
-                        <td><span class="status-tag">CONNECTED</span></td>
+                        <td>Realtime DB Handshake</td>
+                        <td>Data Node</td>
+                        <td><span class="status-tag">STABLE</span></td>
                         <td>12m ago</td>
                     </tr>
                 </tbody>
