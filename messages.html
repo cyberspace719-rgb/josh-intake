@@ -3,69 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Messages - Josh Intake</title>
+    <title>Messages | Josh Intake</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, sans-serif; }
-        body { background-color: #02040a; color: white; display: flex; height: 100vh; overflow: hidden; }
-        .sidebar { width: 260px; background: #0f172a; border-right: 1px solid #1e293b; display: flex; flex-direction: column; padding: 20px; flex-shrink: 0; }
-        .brand { font-size: 1.4rem; font-weight: bold; margin-bottom: 40px; color: white; }
+        /* --- RESET & SHARED STYLES --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', -apple-system, sans-serif; }
+        body { background-color: #0b0f1a; color: #e2e8f0; display: flex; height: 100vh; overflow: hidden; }
+
+        /* --- SIDEBAR (Matches Dashboard) --- */
+        .sidebar { width: 260px; background: #111827; border-right: 1px solid #1f2937; display: flex; flex-direction: column; padding: 24px; flex-shrink: 0; }
+        .brand { font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 40px; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px; }
         .brand span { color: #06b6d4; }
-        .menu-item { padding: 12px 15px; margin-bottom: 5px; color: #94a3b8; cursor: pointer; border-radius: 8px; transition: 0.3s; display: flex; align-items: center; gap: 12px; }
-        .menu-item:hover, .menu-item.active { background: #1e293b; color: #fff; }
-        .menu-item.active { border-left: 3px solid #06b6d4; }
+        .nav-section { display: flex; flex-direction: column; gap: 4px; }
+        .menu-item { padding: 10px 16px; color: #9ca3af; cursor: pointer; border-radius: 8px; transition: all 0.2s ease; display: flex; align-items: center; gap: 12px; text-decoration: none; font-size: 0.9rem; border-left: 3px solid transparent; }
+        .menu-item:hover { background: #1f2937; color: #fff; }
+        .menu-item.active { background: #1f2937; color: #06b6d4; border-left: 3px solid #06b6d4; }
+
+        /* --- CHAT AREA --- */
+        .main-content { flex: 1; display: flex; flex-direction: column; background: #0b0f1a; width: 100%; }
         
-        .main-content { flex-grow: 1; display: flex; flex-direction: column; background: #02040a; }
-        .chat-header { padding: 20px; border-bottom: 1px solid #1e293b; background: #0f172a; display: flex; justify-content: space-between; align-items: center; }
+        .chat-header { padding: 24px 40px; border-bottom: 1px solid #1f2937; background: #0b0f1a; display: flex; justify-content: space-between; align-items: center; }
+        .chat-header h3 { font-size: 1.2rem; font-weight: 700; color: #fff; }
         
-        #chatBox { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-        .msg { max-width: 70%; padding: 10px 15px; border-radius: 15px; font-size: 0.95rem; line-height: 1.4; }
+        #chatBox { flex: 1; padding: 40px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
+        
+        /* Message Bubbles */
+        .msg { max-width: 60%; padding: 14px 18px; border-radius: 12px; font-size: 0.95rem; line-height: 1.5; position: relative; }
         .msg.sent { align-self: flex-end; background: #06b6d4; color: white; border-bottom-right-radius: 2px; }
-        .msg.received { align-self: flex-start; background: #1e293b; color: #e2e8f0; border-bottom-left-radius: 2px; }
-        .msg-info { font-size: 0.7rem; opacity: 0.7; margin-bottom: 4px; display: block; }
+        .msg.received { align-self: flex-start; background: #1f2937; color: #e2e8f0; border: 1px solid #374151; border-bottom-left-radius: 2px; }
+        
+        .msg-info { font-size: 0.7rem; opacity: 0.6; margin-bottom: 6px; display: block; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
 
-        .input-area { padding: 20px; background: #0f172a; display: flex; gap: 10px; border-top: 1px solid #1e293b; }
-        .input-area input { flex-grow: 1; padding: 12px; background: #02040a; border: 1px solid #334155; color: white; border-radius: 8px; outline: none; }
-        .btn-send { background: #06b6d4; color: white; border: none; padding: 0 20px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        /* Input Area */
+        .input-area { padding: 24px 40px; background: #111827; border-top: 1px solid #1f2937; display: flex; gap: 16px; }
+        .input-area input { flex: 1; padding: 14px; background: #0b0f1a; border: 1px solid #374151; color: white; border-radius: 8px; outline: none; transition: 0.2s; }
+        .input-area input:focus { border-color: #06b6d4; }
+        
+        .btn-send { background: #06b6d4; color: white; border: none; padding: 0 24px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .btn-send:hover { background: #0891b2; }
 
-        /* Admin Clear Button Style */
-        .btn-clear { background: #f87171; color: white; border: none; padding: 8px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: bold; cursor: pointer; display: none; }
+        .btn-clear { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 8px 16px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; display: none; }
+        .btn-clear:hover { background: rgba(239, 68, 68, 0.2); }
 
-        @media (max-width: 768px) {
-            body { flex-direction: column; }
-            .sidebar { width: 100%; height: auto; flex-direction: row; overflow-x: auto; padding: 10px; }
-            .main-content { height: calc(100vh - 70px); }
-        }
+        @media (max-width: 768px) { body { flex-direction: column; } .sidebar { width: 100%; height: auto; } }
     </style>
 </head>
 <body>
     <audio id="notifSound" src="notify.mp3"></audio>
 
-    <div class="sidebar">
-        <div class="brand">Josh <span>Intake</span></div>
-        <div class="menu-item" onclick="window.location.href='dashboard.html'">📊 Dashboard</div>
-        <div class="menu-item" onclick="window.location.href='projects.html'">🚀 Projects</div>
-        <div class="menu-item" onclick="window.location.href='clients.html'">👥 Clients</div>
-        <div class="menu-item active">💬 Messages</div>
-        <div class="menu-item" onclick="window.location.href='settings.html'">⚙️ Settings</div>
-        <div style="margin-top:auto; color:#f87171; cursor:pointer;" onclick="window.location.href='index.html'">🚪 Log Out</div>
-    </div>
+    <aside class="sidebar">
+        <div class="brand">JOSH<span>INTAKE</span></div>
+        <div class="nav-section">
+            <a href="dashboard.html" class="menu-item">📊 System Overview</a>
+            <a href="projects.html" class="menu-item">📁 Project Registry</a>
+            <a href="clients.html" class="menu-item">👥 Client Directory</a>
+            <a href="messages.html" class="menu-item active">💬 System Messages</a>
+            <a href="settings.html" class="menu-item">⚙️ Settings</a>
+        </div>
+        <div style="margin-top: auto;">
+            <a href="index.html" class="menu-item" style="color: #ef4444;">🚪 Terminate Session</a>
+        </div>
+    </aside>
 
-    <div class="main-content">
+    <main class="main-content">
         <div class="chat-header">
             <div>
-                <h3>Global Chat</h3>
-                <p style="font-size: 0.8rem; color: #94a3b8;">Real-time comms</p>
+                <h3>Live Communication</h3>
+                <p style="font-size: 0.85rem; color: #9ca3af; margin-top: 4px;">Real-time feed from Visitor Console</p>
             </div>
-            <button class="btn-clear" id="adminClearBtn">Clear All Messages</button>
+            <button class="btn-clear" id="adminClearBtn">Clear History</button>
         </div>
         
-        <div id="chatBox"></div>
+        <div id="chatBox">
+            </div>
 
         <div class="input-area">
-            <input type="text" id="msgInput" placeholder="Type a message...">
+            <input type="text" id="msgInput" placeholder="Type your reply...">
             <button class="btn-send" id="sendBtn">Send</button>
         </div>
-    </div>
+    </main>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -76,37 +91,45 @@
             apiKey: "AIzaSyAiK7MfkCK21BVJ2KOHhCYwVrx82Q2bg78",
             authDomain: "josh-intake.firebaseapp.com",
             databaseURL: "https://josh-intake-default-rtdb.firebaseio.com",
-            projectId: "josh-intake",
-            storageBucket: "josh-intake.firebasestorage.app",
-            messagingSenderId: "339460724072",
-            appId: "1:339460724072:web:709c71921e8ac64d3ef2dd"
+            projectId: "josh-intake"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getDatabase(app);
         const sound = document.getElementById('notifSound');
-        const adminEmail = "ucheomajoshua0@gmail.com"; // YOUR EMAIL
+        
+        // --- REPLACE THIS WITH YOUR ACTUAL ADMIN EMAIL ---
+        const adminEmail = "ucheomajoshua0@gmail.com"; 
+
         let initialLoad = true;
 
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                // Check if user is Admin
                 if (user.email === adminEmail) {
                     document.getElementById('adminClearBtn').style.display = 'block';
                 }
 
                 const chatRef = ref(db, 'messages');
                 
-                // Watch for new messages
                 onChildAdded(chatRef, (snapshot) => {
                     const msg = snapshot.val();
                     const chatBox = document.getElementById('chatBox');
+                    
+                    // Check if message is from Admin (You) or Visitor
                     const isMe = msg.senderId === user.uid;
 
                     const msgDiv = document.createElement('div');
                     msgDiv.className = `msg ${isMe ? 'sent' : 'received'}`;
-                    msgDiv.innerHTML = `<span class="msg-info">${isMe ? 'Me' : msg.senderEmail}</span>${msg.text}`;
+                    
+                    // Display "Visitor" if no email is present (for anonymous users)
+                    const displayName = isMe ? 'System Admin' : (msg.senderEmail || 'Visitor');
+                    
+                    msgDiv.innerHTML = `
+                        <span class="msg-info">${displayName}</span>
+                        ${msg.text}
+                    `;
+                    
                     chatBox.appendChild(msgDiv);
                     chatBox.scrollTop = chatBox.scrollHeight;
 
@@ -115,7 +138,7 @@
                     }
                 });
 
-                // Watch for total reset (Clear Chat)
+                // Handle Clear Chat
                 onValue(chatRef, (snapshot) => {
                     if (!snapshot.exists()) {
                         document.getElementById('chatBox').innerHTML = '';
@@ -129,20 +152,19 @@
             }
         });
 
-        // ADMIN CLEAR LOGIC
+        // Admin Clear Button
         document.getElementById('adminClearBtn').onclick = () => {
-            if(confirm("Admin: Permanently delete all chat history?")) {
+            if(confirm("⚠ WARNING: This will delete ALL messages for everyone. Continue?")) {
                 remove(ref(db, 'messages'));
             }
         };
 
-        document.getElementById('sendBtn').onclick = sendMessage;
-        document.getElementById('msgInput').onkeypress = (e) => { if(e.key === 'Enter') sendMessage(); };
-
+        // Send Logic
         function sendMessage() {
             const text = document.getElementById('msgInput').value;
             const user = auth.currentUser;
-            if(text && user) {
+            
+            if(text.trim() && user) {
                 push(ref(db, 'messages'), {
                     text: text,
                     senderId: user.uid,
@@ -152,6 +174,10 @@
                 document.getElementById('msgInput').value = '';
             }
         }
+
+        document.getElementById('sendBtn').onclick = sendMessage;
+        document.getElementById('msgInput').onkeypress = (e) => { if(e.key === 'Enter') sendMessage(); };
     </script>
 </body>
 </html>
+                
