@@ -5,22 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Josh Intake | Professional Command Center</title>
     <style>
-        /* Existing Styles ... */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, sans-serif; }
         body { background-color: #02040a; color: white; line-height: 1.6; overflow-x: hidden; }
+        
+        /* Background & Nav */
         .bg-glow { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at 50% -20%, #1e293b, #02040a); z-index: -1; }
         nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 10%; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(10px); border-bottom: 1px solid #1e293b; position: sticky; top: 0; z-index: 1000; }
         .logo { font-size: 1.5rem; font-weight: 800; } .logo span { color: #06b6d4; }
-        .btn { padding: 12px 24px; border-radius: 8px; font-weight: 600; text-decoration: none; cursor: pointer; border: none; }
+        .btn { padding: 12px 24px; border-radius: 8px; font-weight: 600; text-decoration: none; cursor: pointer; border: none; transition: 0.2s; }
+        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
         .btn-primary { background: #06b6d4; color: #fff; }
 
-        /* --- NEW: Contact Modal Styles --- */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 2000; }
-        .modal-content { background: #0f172a; padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; border: 1px solid #06b6d4; }
-        .modal-content input, .modal-content textarea { width: 100%; padding: 12px; margin-top: 15px; background: #02040a; border: 1px solid #1e293b; color: white; border-radius: 8px; outline: none; }
+        /* Hero Section */
+        header { height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px; }
+        h1 { font-size: 3rem; margin-bottom: 16px; background: linear-gradient(to right, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        /* Contact Modal */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(5px); }
+        .modal-content { background: #0f172a; padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; border: 1px solid #1e293b; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5); }
+        .modal-content input, .modal-content textarea { width: 100%; padding: 12px; margin-top: 15px; background: #02040a; border: 1px solid #1e293b; color: white; border-radius: 8px; outline: none; transition: 0.2s; }
+        .modal-content input:focus, .modal-content textarea:focus { border-color: #06b6d4; }
         
         /* Floating Chat Button */
-        .floating-chat { position: fixed; bottom: 30px; right: 30px; background: #06b6d4; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; box-shadow: 0 0 20px rgba(6, 182, 212, 0.5); z-index: 999; }
+        .floating-chat { position: fixed; bottom: 30px; right: 30px; background: #06b6d4; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; box-shadow: 0 0 20px rgba(6, 182, 212, 0.5); z-index: 999; transition: 0.2s; }
+        .floating-chat:hover { transform: scale(1.1); }
     </style>
 </head>
 <body>
@@ -30,12 +38,12 @@
         <div><a href="login.html" class="btn btn-primary">Sign In</a></div>
     </nav>
 
-    <header style="height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 20px;">
+    <header>
         <h1>Your Business, Optimized.</h1>
-        <p style="color: #94a3b8; max-width: 600px; margin-bottom: 30px;">Manage your Forex goals, software projects, and client communication in one secure, high-speed dashboard.</p>
+        <p style="color: #94a3b8; max-width: 600px; margin-bottom: 30px; font-size: 1.1rem;">Manage your Forex goals, software projects, and client communication in one secure, high-speed dashboard.</p>
         <div style="display: flex; gap: 15px;">
-            <a href="signup.html" class="btn btn-primary">Get Started</a>
-            <button class="btn" style="background: #1e293b; color: white;" onclick="openContact()">Contact Me</button>
+            <button class="btn btn-primary" onclick="openContact()">Get Started</button>
+            <button class="btn" style="background: #1e293b; color: white; border: 1px solid #334155;" onclick="openContact()">Contact Me</button>
         </div>
     </header>
 
@@ -43,12 +51,14 @@
 
     <div class="modal" id="contactModal">
         <div class="modal-content">
-            <h3>Send a Message</h3>
-            <p style="color: #94a3b8; font-size: 0.8rem;">I'll receive this in my admin dashboard instantly.</p>
-            <input type="text" id="visitorName" placeholder="Your Name">
+            <h3 style="font-size: 1.5rem; margin-bottom: 5px;">Send a Message</h3>
+            <p style="color: #94a3b8; font-size: 0.9rem;">I'll receive this in my admin dashboard instantly.</p>
+            
+            <input type="text" id="visitorName" placeholder="Your Name (e.g., Client)">
             <textarea id="visitorMsg" placeholder="How can I help you?" rows="4"></textarea>
+            
             <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" id="sendVisitBtn">Send Message</button>
-            <button style="background:none; border:none; color:#94a3b8; width:100%; margin-top:15px; cursor:pointer;" onclick="closeContact()">Close</button>
+            <button style="background:none; border:none; color:#94a3b8; width:100%; margin-top:15px; cursor:pointer; font-size: 0.9rem;" onclick="closeContact()">Close</button>
         </div>
     </div>
 
@@ -66,26 +76,59 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        window.openContact = () => document.getElementById('contactModal').style.display = 'flex';
-        window.closeContact = () => document.getElementById('contactModal').style.display = 'none';
+        // Make functions global so HTML buttons can use them
+        window.openContact = () => {
+            const modal = document.getElementById('contactModal');
+            modal.style.display = 'flex';
+        };
+        
+        window.closeContact = () => {
+            document.getElementById('contactModal').style.display = 'none';
+        };
 
+        // Close modal if clicking outside content
+        window.onclick = (event) => {
+            const modal = document.getElementById('contactModal');
+            if (event.target == modal) {
+                closeContact();
+            }
+        };
+
+        // --- SEND MESSAGE LOGIC ---
         document.getElementById('sendVisitBtn').onclick = async () => {
-            const name = document.getElementById('visitorName').value;
-            const msg = document.getElementById('visitorMsg').value;
+            const nameInput = document.getElementById('visitorName');
+            const msgInput = document.getElementById('visitorMsg');
+            
+            const name = nameInput.value.trim();
+            const msg = msgInput.value.trim();
 
             if(name && msg) {
-                await push(ref(db, 'messages'), {
-                    text: `[INQUIRY FROM ${name}]: ${msg}`,
-                    senderId:'anon-'+ ne
-                    senderEmail: .visitorName.value,
+                const btn = document.getElementById('sendVisitBtn');
+                btn.innerText = "Sending...";
+                btn.disabled = true;
 
-                    timestamp: serverTimestamp()
-                alert("Message sent! I will check it in my dashboard.");
-                closeContact();
-                document.getElementById('visitorName').value = '';
-                document.getElementById('visitorMsg').value = '';
+                try {
+                    await push(ref(db, 'messages'), {
+                        text: msg,
+                        senderId: 'anon-' + new Date().getTime(), // FIXED LINE 79
+                        senderEmail: name, // Uses the name as the sender label
+                        timestamp: serverTimestamp()
+                    });
+                    
+                    alert("Message sent! I will check it in my dashboard.");
+                    closeContact();
+                    nameInput.value = '';
+                    msgInput.value = '';
+                    
+                } catch (error) {
+                    console.error(error);
+                    alert("Error sending message. Please try again.");
+                } finally {
+                    btn.innerText = "Send Message";
+                    btn.disabled = false;
+                }
             } else {
-                alert("Please fill in both fields.");
+                alert("Please fill in both your Name and Message.");
             }
         };
     </script>
